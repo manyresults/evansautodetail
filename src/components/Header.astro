@@ -1,0 +1,108 @@
+---
+import { SITE, NAV } from "../consts";
+import Logo from "./Logo.astro";
+
+// Normalize paths so "/services" and "/services/" both match.
+const norm = (p: string) => (p !== "/" ? p.replace(/\/$/, "") : p);
+const current = norm(Astro.url.pathname);
+---
+
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a href="/" class="flex items-center gap-2" aria-label={`${SITE.name} — home`}>
+      <Logo class="h-9 w-auto" />
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden items-center gap-1 md:flex" aria-label="Primary">
+      {
+        NAV.map((item) => {
+          const active = current === norm(item.href);
+          return (
+            <a
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              class:list={[
+                "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                active
+                  ? "text-accent"
+                  : "text-slate-700 hover:text-accent",
+              ]}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={SITE.phoneHref}
+        class="hidden rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent-600 sm:inline-flex"
+      >
+        Call {SITE.phoneDisplay}
+      </a>
+
+      <!-- Mobile menu toggle -->
+      <button
+        id="menu-toggle"
+        type="button"
+        class="inline-flex items-center justify-center rounded-md p-2 text-slate-700 md:hidden"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Toggle navigation menu"
+      >
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <nav
+    id="mobile-menu"
+    class="hidden border-t border-slate-200 bg-white md:hidden"
+    aria-label="Mobile"
+  >
+    <ul class="space-y-1 px-4 py-3">
+      {
+        NAV.map((item) => {
+          const active = current === norm(item.href);
+          return (
+            <li>
+              <a
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                class:list={[
+                  "block rounded-md px-3 py-2 text-base font-medium",
+                  active ? "bg-slate-50 text-accent" : "text-slate-700 hover:bg-slate-50",
+                ]}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })
+      }
+      <li class="pt-2">
+        <a
+          href={SITE.phoneHref}
+          class="block rounded-full bg-accent px-4 py-2 text-center text-base font-semibold text-white"
+        >
+          Call {SITE.phoneDisplay}
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  toggle?.addEventListener("click", () => {
+    const open = menu?.classList.toggle("hidden") === false;
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+</script>

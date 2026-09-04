@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Testimonials from "../components/Testimonials.astro";
+import CTA from "../components/CTA.astro";
+import { SITE } from "../consts";
+---
+
+<BaseLayout
+  title="About Us"
+  description={`Learn about Earl's Proper Detailing — a four-time Best of Bucks winner with over 20 years of auto detailing experience in ${SITE.address.city}, ${SITE.address.state}.`}
+>
+  <Hero
+    eyebrow="About us"
+    title="Proper detailing, done right for over 20 years"
+    subtitle="Earl's Proper Detailing has been making Bucks County's vehicles shine for two decades — with honest work, premium products, and pride in every detail."
+  />
+
+  <section class="py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6">
+      <div class="prose-lg space-y-5 text-lg leading-relaxed text-slate-600">
+        <p>
+          At {SITE.name}, we provide a comprehensive range of services to ensure
+          your vehicle looks its absolute best. From washing, waxing, and
+          polishing to full interior detailing, ceramic coating, and paint
+          protection, our team brings over {SITE.yearsExperience} years of
+          experience to every job.
+        </p>
+        <p>
+          That experience — and our commitment to doing things the proper way —
+          has earned us the <strong class="text-ink">Best of Bucks</strong> award
+          four consecutive years. But the recognition we value most comes from
+          our customers, who trust us with their vehicles and keep coming back.
+        </p>
+        <p>
+          Whether you're protecting a brand-new car with a ceramic coating,
+          restoring the finish on a daily driver, or getting your vehicle ready
+          to sell, we treat every car as if it were our own.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <dl class="mt-12 grid grid-cols-3 gap-6 rounded-2xl bg-slate-50 p-8 text-center">
+        <div>
+          <dt class="text-3xl font-extrabold text-accent">{SITE.yearsExperience}</dt>
+          <dd class="mt-1 text-sm text-slate-600">Years in business</dd>
+        </div>
+        <div>
+          <dt class="text-3xl font-extrabold text-accent">4×</dt>
+          <dd class="mt-1 text-sm text-slate-600">Best of Bucks</dd>
+        </div>
+        <div>
+          <dt class="text-3xl font-extrabold text-accent">5.0★</dt>
+          <dd class="mt-1 text-sm text-slate-600">Customer rating</dd>
+        </div>
+      </dl>
+
+      <!-- Service area -->
+      <div class="mt-12">
+        <h2 class="text-2xl font-extrabold text-ink">Areas we serve</h2>
+        <p class="mt-3 text-slate-600">
+          Proudly serving {SITE.address.city} and the surrounding communities:
+        </p>
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {
+            SITE.serviceAreas.map((area) => (
+              <li class="rounded-full bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent">
+                {area}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Testimonials heading="Trusted by our neighbors" />
+
+  <CTA />
+</BaseLayout>

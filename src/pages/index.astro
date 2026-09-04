@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import ServicesGrid from "../components/ServicesGrid.astro";
+import Testimonials from "../components/Testimonials.astro";
+import CTA from "../components/CTA.astro";
+import { SITE } from "../consts";
+
+const reasons = [
+  {
+    title: "20+ years of experience",
+    text: "Two decades of hands-on detailing know-how on every make and model that rolls through our doors.",
+  },
+  {
+    title: "Award-winning work",
+    text: "A four-time Best of Bucks winner — recognized by the community we've proudly served for years.",
+  },
+  {
+    title: "Premium products",
+    text: "Professional-grade ceramic coatings, films, and finishes that protect your vehicle and last.",
+  },
+  {
+    title: "Honest, fair pricing",
+    text: "Straightforward estimates and quality work — the reason our customers keep coming back.",
+  },
+];
+---
+
+<BaseLayout
+  title={`${SITE.name} — Auto Detailing in ${SITE.address.city}, ${SITE.address.state}`}
+  description={SITE.description}
+>
+  <Hero
+    eyebrow={`${SITE.address.city}, ${SITE.address.state} · ${SITE.awards}`}
+    title="Detailing done the proper way."
+    subtitle={`Expert auto detailing, ceramic coating, and paint protection in ${SITE.address.city} and throughout Bucks County. Trusted for over 20 years to make every vehicle look its absolute best.`}
+    showBadges={true}
+  />
+
+  <!-- Intro -->
+  <section class="py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl px-4 text-center sm:px-6">
+      <p class="text-sm font-semibold uppercase tracking-wider text-accent">Welcome to Earl's</p>
+      <h2 class="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">
+        Bucks County's trusted auto detailing shop
+      </h2>
+      <p class="mt-5 text-lg leading-relaxed text-slate-600">
+        At {SITE.name}, we offer a complete range of services to make sure your
+        vehicle looks its absolute best — washing, waxing, polishing, interior
+        detailing, and long-lasting protection. With {SITE.yearsExperience} years
+        in the business and four consecutive Best of Bucks awards, you can trust
+        your car is in proper hands.
+      </p>
+    </div>
+  </section>
+
+  <!-- Featured services -->
+  <section class="bg-slate-50 py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wider text-accent">What we do</p>
+          <h2 class="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">Our services</h2>
+        </div>
+        <a href="/services/" class="font-semibold text-accent hover:text-accent-600">
+          View all services &rarr;
+        </a>
+      </div>
+      <div class="mt-10">
+        <ServicesGrid featuredOnly={true} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Why choose us -->
+  <section class="py-16 sm:py-20">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-semibold uppercase tracking-wider text-accent">Why Earl's</p>
+        <h2 class="mt-2 text-3xl font-extrabold text-ink sm:text-4xl">Why customers choose us</h2>
+      </div>
+      <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          reasons.map((r) => (
+            <div class="rounded-2xl border border-slate-200 p-6">
+              <h3 class="text-lg font-bold text-ink">{r.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-600">{r.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Testimonials />
+
+  <CTA />
+</BaseLayout>

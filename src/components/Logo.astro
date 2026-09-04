@@ -1,0 +1,39 @@
+---
+/**
+ * Logo.astro — brand lockup (emblem + wordmark).
+ * Placeholder mark: replace the emblem SVG (or swap in a real logo file) once
+ * the official Earl's Proper Detailing logo is available.
+ */
+import { SITE } from "../consts";
+interface Props {
+  class?: string;
+}
+const { class: className = "h-9 w-auto" } = Astro.props;
+---
+
+<span class="inline-flex items-center gap-2">
+  <svg
+    class={className}
+    viewBox="0 0 40 40"
+    role="img"
+    aria-label={SITE.name}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect x="1" y="1" width="38" height="38" rx="9" fill="var(--color-ink)" />
+    <!-- car silhouette -->
+    <path
+      d="M9 24.5c0-.7.3-1.2.9-1.6l1.7-3.4c.4-.9 1.3-1.5 2.3-1.5h10.2c1 0 1.9.6 2.3 1.5l1.7 3.4c.6.4.9.9.9 1.6v3.1c0 .5-.4.9-.9.9h-1.3c-.5 0-.9-.4-.9-.9v-.8H13.1v.8c0 .5-.4.9-.9.9H10c-.5 0-.9-.4-.9-.9v-3.1Z"
+      fill="#fff"
+    />
+    <circle cx="14" cy="26" r="1.6" fill="var(--color-ink)" />
+    <circle cx="26" cy="26" r="1.6" fill="var(--color-ink)" />
+    <!-- shine sparkle -->
+    <path
+      d="M30 9.5l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9.9-2.3Z"
+      fill="var(--color-gold)"
+    />
+  </svg>
+  <span class="font-display text-lg font-extrabold leading-none tracking-tight text-ink sm:text-xl">
+    Earl's <span class="text-accent">Proper</span> Detailing
+  </span>
+</span>

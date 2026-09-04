@@ -1,0 +1,14 @@
+---
+import ServiceCard from "./ServiceCard.astro";
+import { SERVICES } from "../consts";
+interface Props {
+  /** When true, only show services flagged `featured`. */
+  featuredOnly?: boolean;
+}
+const { featuredOnly = false } = Astro.props;
+const items = featuredOnly ? SERVICES.filter((s) => s.featured) : SERVICES;
+---
+
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {items.map((service) => <ServiceCard service={service} />)}
+</div>

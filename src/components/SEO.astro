@@ -1,0 +1,121 @@
+---
+/**
+ * SEO.astro — one component every page imports (via BaseLayout).
+ * Handles: unique <title> + meta description, Open Graph + Twitter cards,
+ * canonical URL, and JSON-LD LocalBusiness (AutoWash) schema.
+ */
+import { SITE } from "../consts";
+
+interface Props {
+  /** Page-specific title (without the brand suffix). */
+  title: string;
+  /** Page-specific meta description. Falls back to the site default. */
+  description?: string;
+  /** OG/Twitter image — absolute URL or site-root-relative path. */
+  image?: string;
+  /** Canonical path override (defaults to the current URL). */
+  canonical?: string;
+  /** Set true to keep a page out of search engines. */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = SITE.ogImage,
+  canonical,
+  noindex = false,
+} = Astro.props;
+
+// Compose a full <title>, avoiding a duplicated brand name.
+const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
+
+// Resolve absolute URLs against the configured `site` (astro.config.mjs).
+const canonicalURL = new URL(canonical ?? Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
+
+// --- JSON-LD: LocalBusiness / AutoWash ---------------------------------------
+const DAY_SCHEMA: Record<string, string> = {
+  Monday: "https://schema.org/Monday",
+  Tuesday: "https://schema.org/Tuesday",
+  Wednesday: "https://schema.org/Wednesday",
+  Thursday: "https://schema.org/Thursday",
+  Friday: "https://schema.org/Friday",
+  Saturday: "https://schema.org/Saturday",
+  Sunday: "https://schema.org/Sunday",
+};
+
+// Convert a "8:00 AM" style string to 24-hour "HH:MM" for schema.org.
+function to24h(t: string): string {
+  const m = t.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!m) return t;
+  let hour = parseInt(m[1], 10);
+  const min = m[2];
+  const ampm = m[3].toUpperCase();
+  if (ampm === "PM" && hour !== 12) hour += 12;
+  if (ampm === "AM" && hour === 12) hour = 0;
+  return `${String(hour).padStart(2, "0")}:${min}`;
+}
+
+const openingHours = SITE.hours
+  .filter((h) => h.open && h.close)
+  .map((h) => ({
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: DAY_SCHEMA[h.day],
+    opens: to24h(h.open as string),
+    closes: to24h(h.close as string),
+  }));
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AutoWash",
+  "@id": `${SITE.url}/#business`,
+  name: SITE.name,
+  description: SITE.description,
+  url: SITE.url,
+  telephone: SITE.phoneDisplay,
+  email: SITE.email,
+  image: imageURL.href,
+  priceRange: "$$",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: SITE.address.street,
+    addressLocality: SITE.address.city,
+    addressRegion: SITE.address.state,
+    postalCode: SITE.address.zip,
+    addressCountry: SITE.address.country,
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: SITE.geo.lat,
+    longitude: SITE.geo.lng,
+  },
+  areaServed: SITE.serviceAreas.map((a) => ({ "@type": "Place", name: a })),
+  ...(openingHours.length ? { openingHoursSpecification: openingHours } : {}),
+  ...(SITE.social.facebook ? { sameAs: [SITE.social.facebook] } : {}),
+};
+---
+
+<!-- Primary meta -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL.href} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL.href} />
+<meta property="og:image" content={imageURL.href} />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL.href} />
+
+<!-- JSON-LD structured data -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

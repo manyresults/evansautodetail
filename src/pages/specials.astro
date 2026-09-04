@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import CTA from "../components/CTA.astro";
+import { SITE, SPECIALS } from "../consts";
+---
+
+<BaseLayout
+  title="Specials & Offers"
+  description={`Current specials at Earl's Proper Detailing in ${SITE.address.city}, ${SITE.address.state} — save on detailing and ceramic coating. Mention our website to save.`}
+>
+  <Hero
+    eyebrow="Save with Earl's"
+    title="Current specials & offers"
+    subtitle="Great detailing at a fair price — and a little extra when you book with us. Mention our website to claim your discount."
+  />
+
+  <section class="py-16 sm:py-20">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6">
+      <div class="grid gap-6 sm:grid-cols-2">
+        {
+          SPECIALS.map((special) => (
+            <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+              <span class="inline-flex rounded-full bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+                {special.highlight}
+              </span>
+              <h2 class="mt-4 text-2xl font-extrabold text-ink">{special.title}</h2>
+              <p class="mt-3 leading-relaxed text-slate-600">{special.detail}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="mt-8 text-center text-sm text-slate-500">
+        Offers cannot be combined and are subject to change. Call
+        <a href={SITE.phoneHref} class="font-semibold text-accent hover:text-accent-600">
+          {SITE.phoneDisplay}
+        </a>
+        for full details.
+      </p>
+    </div>
+  </section>
+
+  <CTA heading="Ready to claim your discount?" text="Call today and mention our website to save on your next detail." />
+</BaseLayout>
