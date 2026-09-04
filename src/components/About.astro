@@ -1,0 +1,75 @@
+---
+/**
+ * About.astro — Brian's story, values, and the satisfaction guarantee.
+ * Copy reworked from the old site (typos fixed, thin copy expanded).
+ */
+import { Image } from "astro:assets";
+import { SITE, STATS } from "../consts";
+import aboutImg from "../assets/gallery/evans-detail-ford-taurus.jpg";
+---
+
+<section id="about" class="relative bg-ink-900 py-20 sm:py-28">
+  <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16">
+    <!-- Copy -->
+    <div>
+      <p class="eyebrow">About Evans' Detailing</p>
+      <h2 class="mt-4 text-3xl font-bold uppercase text-white sm:text-5xl">
+        Detailing with <span class="text-red">passion</span> since 1996
+      </h2>
+
+      <div class="mt-6 space-y-5 text-[17px] leading-relaxed text-white/75">
+        <p>
+          Evans' Detailing started with one simple thing — a genuine love for
+          making cars look their absolute best. <span class="text-white">"My
+          name is Brian Evans, and I've been detailing since {SITE.since}."</span>
+          What began as a passion and a little elbow grease has grown, over {SITE.yearsExperience} years,
+          into a full-service mobile detailing business trusted across {SITE.region}.
+        </p>
+        <p>
+          We believe in community, family, and supporting small local business.
+          When your vehicle is clean and sharp, you feel it — more confident,
+          more motivated, ready for whatever the day throws at you. So we sweat
+          the small details most shops miss, and we treat every car, truck,
+          boat, and bike like it's our own.
+        </p>
+        <p>
+          We stand behind every job with a <span class="text-white">100%
+          satisfaction guarantee: you don't pay unless you're completely
+          satisfied</span> with the work. That's how we've built the long-term
+          customer relationships that keep Evans' Detailing growing — one
+          spotless vehicle at a time.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <dl class="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-4">
+        {STATS.map((s) => (
+          <div class="bg-ink-800 px-4 py-5 text-center">
+            <dt class="font-display text-3xl font-bold text-red">{s.value}</dt>
+            <dd class="mt-1 text-xs uppercase tracking-wider text-white/60">{s.label}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <!-- Image + guarantee badge -->
+    <div class="relative">
+      <div class="overflow-hidden rounded-md border border-line">
+        <Image
+          src={aboutImg}
+          alt="A deep-red sedan detailed to a high gloss by Evans' Detailing"
+          class="aspect-[4/3] w-full object-cover"
+          widths={[480, 720, 960]}
+          sizes="(min-width: 1024px) 40vw, 90vw"
+          loading="lazy"
+        />
+      </div>
+      <div class="absolute -bottom-5 -left-5 hidden max-w-[15rem] rounded-md border border-red bg-ink-950 p-5 shadow-xl sm:block">
+        <p class="font-display text-lg font-bold uppercase leading-tight text-white">
+          100% Satisfaction <span class="text-red">Guaranteed</span>
+        </p>
+        <p class="mt-1 text-sm text-white/60">Don't pay unless you're completely satisfied.</p>
+      </div>
+    </div>
+  </div>
+</section>

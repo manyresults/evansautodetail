@@ -1,7 +1,9 @@
 ---
 /**
- * BaseLayout.astro — the HTML shell for every page.
- * Wires in SEO, global styles, fonts, and the shared Header/Footer.
+ * BaseLayout.astro — the HTML shell.
+ * Wires in SEO, global styles, fonts, and the shared Header/Footer. This is a
+ * single-page site, so there is really one content page (index.astro), but the
+ * layout is kept as a component so 404.astro shares the same chrome.
  */
 import "../styles/global.css";
 import SEO from "../components/SEO.astro";
@@ -25,13 +27,17 @@ const { title, description, image, canonical, noindex } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Fonts -->
+    <!-- Favicons (generated from the brand mark) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Fonts: Oswald (display) + Inter (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -43,10 +49,10 @@ const { title, description, image, canonical, noindex } = Astro.props;
       noindex={noindex}
     />
   </head>
-  <body class="min-h-screen bg-white text-slate-900 antialiased">
+  <body class="min-h-screen bg-ink text-white antialiased" id="top">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-ink focus:px-4 focus:py-2 focus:text-white"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-red focus:px-4 focus:py-2 focus:font-semibold focus:text-white"
     >
       Skip to content
     </a>

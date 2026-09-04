@@ -1,13 +1,14 @@
 ---
 /**
- * ServiceIcon.astro — maps a `name` key (from SERVICES[].icon) to an inline
- * SVG. Inline SVGs keep the site fast (no image requests) and crisp at any size.
+ * ServiceIcon.astro — maps a `name` key (from SERVICES[].icon and
+ * VEHICLE_TYPES[].icon) to an inline SVG. Inline SVGs keep the site fast
+ * (no image requests) and crisp at any size.
  */
 interface Props {
   name: string;
   class?: string;
 }
-const { name, class: className = "h-7 w-7" } = Astro.props;
+const { name, class: className = "h-8 w-8" } = Astro.props;
 ---
 
 <svg
@@ -18,28 +19,37 @@ const { name, class: className = "h-7 w-7" } = Astro.props;
   stroke="currentColor"
   aria-hidden="true"
 >
-  {name === "sparkle" && (
-    <path stroke-linecap="round" stroke-linejoin="round" d="M9.8 4.2 11 8l3.8 1.2L11 10.4 9.8 14 8.6 10.4 4.8 9.2 8.6 8 9.8 4.2Zm7.7 8 .8 2.5 2.5.8-2.5.8-.8 2.5-.8-2.5-2.5-.8 2.5-.8.8-2.5Z" />
+  {/* ── Services ─────────────────────────────────────────────── */}
+  {name === "wash" && (
+    <path stroke-linecap="round" stroke-linejoin="round" d="M6 11l1.2-3.4A2 2 0 0 1 9.1 6h5.8a2 2 0 0 1 1.9 1.6L18 11m-12 0h12m-12 0a2 2 0 0 0-2 2v3h2m12-5a2 2 0 0 1 2 2v3h-2m-12 0h12m-12 0v1.5m12-1.5V17M8 3.5C8 4.3 7 5 7 5s-1-.7-1-1.5A1 1 0 0 1 8 3.5Zm5 0C13 4.3 12 5 12 5s-1-.7-1-1.5a1 1 0 0 1 2 0Zm5 0C18 4.3 17 5 17 5s-1-.7-1-1.5a1 1 0 0 1 2 0Z" />
+  )}
+  {name === "polish" && (
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4 20 14 10m0 0 2.2-2.2a2.1 2.1 0 0 1 3 3L17 13m-3-3 3 3M17.5 3l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6.6-1.7ZM6 5l.4 1.1L7.5 6.5 6.4 7 6 8l-.4-1L4.5 6.5l1.1-.4L6 5Z" />
   )}
   {name === "shield" && (
     <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 2.5v5c0 4.6-3 8.4-7 9.5-4-1.1-7-4.9-7-9.5v-5L12 3Zm-2.5 8.5 2 2 3.5-4" />
   )}
-  {name === "polish" && (
-    <path stroke-linecap="round" stroke-linejoin="round" d="M4 20 14 10m0 0 2.5-2.5a2.1 2.1 0 0 1 3 3L17 13m-3-3 3 3m1-9 .6 1.6L20 6l-1.4.4L18 8l-.6-1.6L16 6l1.4-.4L18 4Z" />
+  {name === "interior" && (
+    <path stroke-linecap="round" stroke-linejoin="round" d="M6 20v-4m0 0 1.5-7A2 2 0 0 1 9.4 7.4L15 8.5a3 3 0 0 1 2.4 2.3L18 14m-12 2h9a3 3 0 0 0 3-3v-.5M6 16H5a1 1 0 0 1-1-1.2l.4-2A1 1 0 0 1 5.4 12H6" />
   )}
-  {name === "film" && (
-    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Zm0 4h16M9 4v16" />
+  {name === "undercarriage" && (
+    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9h18M6 9l1-2.5A2 2 0 0 1 8.9 5h6.2a2 2 0 0 1 1.9 1.5L18 9M8 12.5v2m4-2v2m4-2v2M5 18l1 2m4-2 1 2m4-2 1 2m3-4 1 2" />
   )}
-  {name === "dent" && (
-    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 0 1 18 0 9 9 0 0 1-18 0Zm5.5 1.5c1-2 2-3 3.5-3s2.5 1 3.5 3" />
+  {name === "sparkle" && (
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9.8 4.2 11 8l3.8 1.2L11 10.4 9.8 14 8.6 10.4 4.8 9.2 8.6 8 9.8 4.2Zm7.7 8 .8 2.5 2.5.8-2.5.8-.8 2.5-.8-2.5-2.5-.8 2.5-.8.8-2.5Z" />
   )}
-  {name === "windshield" && (
-    <path stroke-linecap="round" stroke-linejoin="round" d="M5 16c1.5-6 3-8 7-8s5.5 2 7 8c-4-1.2-10-1.2-14 0Zm7-8v8" />
+
+  {/* ── Vehicle types ────────────────────────────────────────── */}
+  {name === "car" && (
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4 15h16m-16 0-.4-3A2 2 0 0 1 5 10l1.6-3.2A2 2 0 0 1 8.4 5.7h7.2a2 2 0 0 1 1.8 1.1L19 10a2 2 0 0 1 1.4 2l-.4 3m-16 0v2h2v-2m12 0v2h2v-2M6 10h12M8 18a1 1 0 1 1 0-.01M16 18a1 1 0 1 1 0-.01" />
+  )}
+  {name === "boat" && (
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4 14h15l-2 4.5a2 2 0 0 1-1.8 1.2H8.8A2 2 0 0 1 7 18.5L4 14Zm3 0V6.5a1 1 0 0 1 1.5-.9L16 9.5 7 12m5-6.5V12" />
   )}
   {name === "truck" && (
-    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h11v8H3V7Zm11 3h3.5L20 12.5V15h-6v-5ZM7 18a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h10v9H3V7Zm10 3h4l3 3v3h-7v-6ZM7 19a1.6 1.6 0 1 0 0-3.2A1.6 1.6 0 0 0 7 19Zm10 0a1.6 1.6 0 1 0 0-3.2 1.6 1.6 0 0 0 0 3.2Z" />
   )}
-  {name === "van" && (
-    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8a1 1 0 0 1 1-1h9.5c.6 0 1.2.3 1.6.8L19 12l1.5.5c.3.1.5.4.5.8V15h-2M3 8v7h2m0 0a1.5 1.5 0 0 0 3 0m-3 0h3m8 0a1.5 1.5 0 0 0 3 0m-3 0h3M8 15h6M13 7v5h6" />
+  {name === "motorcycle" && (
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm13 0a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Zm-13-2.5H11l3.5-4H9M14 7h3l1.5 6.5M8 7h5l2 4m-8.5 4.5L9 11" />
   )}
 </svg>

@@ -1,40 +1,96 @@
 /**
- * Generates public/og-image.png (1200x630) — the default social share image.
+ * Regenerates public/og-image.png (1200x630) — the social share image —
+ * from committed brand assets, so it's reproducible from the repo.
  * Run with: node scripts/generate-og.mjs
- * Swap this for a real branded graphic (e.g. a photo of the shop) when available.
+ *
+ * Also regenerates the favicons from the brand mark.
  */
 import sharp from "sharp";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const out = resolve(__dirname, "../public/og-image.png");
+const root = resolve(__dirname, "..");
+const logoPath = resolve(root, "src/assets/logo-evans-dark.png");
+const photoPath = resolve(root, "src/assets/gallery/evans-detail-black-kia.jpg");
+const pub = (f) => resolve(root, "public", f);
 
-const svg = `
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+const RED = "#fe0000";
+const INK = { r: 15, g: 15, b: 15, alpha: 1 };
+const PHONE = "267-333-1071";
+
+// ── Favicons: brand car mark (cropped from the wordmark) on an ink square ──
+const logoMeta = await sharp(logoPath).metadata();
+const markBuf = await sharp(logoPath)
+  .extract({
+    left: Math.round(logoMeta.width * 0.045),
+    top: Math.round(logoMeta.height * 0.06),
+    width: Math.round(logoMeta.width * 0.915),
+    height: Math.round(logoMeta.height * 0.62),
+  })
+  .trim({ threshold: 10 })
+  .toBuffer();
+
+async function favicon(size) {
+  const inner = Math.round(size * 0.86);
+  const mark = await sharp(markBuf).resize({ width: inner, fit: "inside" }).toBuffer();
+  const mm = await sharp(mark).metadata();
+  const radius = Math.round(size * 0.18);
+  const roundMask = Buffer.from(
+    `<svg width="${size}" height="${size}"><rect width="${size}" height="${size}" rx="${radius}" ry="${radius}" fill="#fff"/></svg>`
+  );
+  const base = await sharp({ create: { width: size, height: size, channels: 4, background: INK } })
+    .composite([{ input: mark, left: Math.round((size - mm.width) / 2), top: Math.round((size - mm.height) / 2) }])
+    .png()
+    .toBuffer();
+  return sharp(base).composite([{ input: roundMask, blend: "dest-in" }]).png().toBuffer();
+}
+await sharp(await favicon(512)).toFile(pub("favicon-512.png"));
+await sharp(await favicon(192)).toFile(pub("favicon-192.png"));
+await sharp(await favicon(180)).toFile(pub("apple-touch-icon.png"));
+await sharp(await favicon(32)).toFile(pub("favicon-32.png"));
+
+// ── OG image 1200x630 ──────────────────────────────────────────────────────
+const OW = 1200, OH = 630;
+const photo = await sharp(photoPath)
+  .resize({ width: OW, height: OH, fit: "cover", position: "centre" })
+  .modulate({ brightness: 0.62, saturation: 0.9 })
+  .toBuffer();
+
+const overlay = Buffer.from(`
+<svg width="${OW}" height="${OH}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0a0f1a"/>
-      <stop offset="1" stop-color="#111a2e"/>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f0f0f" stop-opacity="0.55"/>
+      <stop offset="0.55" stop-color="#0f0f0f" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#0f0f0f" stop-opacity="0.92"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.85" cy="0.15" r="0.6">
-      <stop offset="0" stop-color="#0ea5e9" stop-opacity="0.35"/>
-      <stop offset="1" stop-color="#0ea5e9" stop-opacity="0"/>
-    </radialGradient>
   </defs>
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="${OW}" height="${OH}" fill="url(#g)"/>
+  <rect x="0" y="0" width="${OW}" height="8" fill="${RED}"/>
+  <rect x="0" y="${OH - 8}" width="${OW}" height="8" fill="${RED}"/>
+</svg>`);
 
-  <!-- sparkle -->
-  <path d="M1050 120 l14 36 36 14 -36 14 -14 36 -14 -36 -36 -14 36 -14 Z" fill="#f5b301"/>
+const logoForOg = await sharp(logoPath).resize({ width: 620, fit: "inside" }).toBuffer();
+const lm = await sharp(logoForOg).metadata();
 
-  <text x="90" y="250" font-family="Poppins, Arial, sans-serif" font-size="78" font-weight="800" fill="#ffffff">Earl's <tspan fill="#0ea5e9">Proper</tspan> Detailing</text>
-  <text x="92" y="320" font-family="Inter, Arial, sans-serif" font-size="34" fill="#cbd5e1">Auto detailing &#183; Ceramic coating &#183; Paint protection</text>
-  <text x="92" y="378" font-family="Inter, Arial, sans-serif" font-size="30" fill="#94a3b8">Langhorne, PA &#183; Four-time Best of Bucks winner</text>
+const textSvg = Buffer.from(`
+<svg width="${OW}" height="${OH}" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .tag{font-family:'DejaVu Sans','Arial',sans-serif;font-weight:700;fill:#ffffff;letter-spacing:3px}
+    .sub{font-family:'DejaVu Sans','Arial',sans-serif;font-weight:700;fill:${RED};letter-spacing:2px}
+  </style>
+  <text x="600" y="470" text-anchor="middle" class="tag" font-size="34">MOBILE AUTO DETAILING · LOWER BUCKS COUNTY, PA</text>
+  <text x="600" y="540" text-anchor="middle" class="sub" font-size="46">TEXT TO BOOK · ${PHONE}</text>
+</svg>`);
 
-  <rect x="90" y="470" width="360" height="70" rx="35" fill="#0ea5e9"/>
-  <text x="270" y="515" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="30" font-weight="700" fill="#ffffff">(215) 791-3015</text>
-</svg>`;
+await sharp(photo)
+  .composite([
+    { input: overlay, left: 0, top: 0 },
+    { input: logoForOg, left: Math.round((OW - lm.width) / 2), top: 120 },
+    { input: textSvg, left: 0, top: 0 },
+  ])
+  .png({ compressionLevel: 9, quality: 90 })
+  .toFile(pub("og-image.png"));
 
-await sharp(Buffer.from(svg)).png().toFile(out);
-console.log("Wrote", out);
+console.log("Wrote favicons + public/og-image.png");

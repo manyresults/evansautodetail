@@ -1,108 +1,112 @@
 ---
-import { SITE, NAV } from "../consts";
+/**
+ * Header.astro — sticky, dark, single-page nav.
+ * Links scroll to in-page anchors (#services, #about, …). Includes a mobile
+ * menu (toggled with a tiny bit of JS) and an always-visible "Text to book" CTA.
+ */
+import { NAV, SITE } from "../consts";
 import Logo from "./Logo.astro";
-
-// Normalize paths so "/services" and "/services/" both match.
-const norm = (p: string) => (p !== "/" ? p.replace(/\/$/, "") : p);
-const current = norm(Astro.url.pathname);
 ---
 
-<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-    <a href="/" class="flex items-center gap-2" aria-label={`${SITE.name} — home`}>
-      <Logo class="h-9 w-auto" />
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-colors duration-300"
+  data-header
+>
+  <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a href="#top" class="flex items-center" aria-label={`${SITE.name} — home`}>
+      <Logo class="h-9 w-auto sm:h-11" />
     </a>
 
     <!-- Desktop nav -->
-    <nav class="hidden items-center gap-1 md:flex" aria-label="Primary">
-      {
-        NAV.map((item) => {
-          const active = current === norm(item.href);
-          return (
-            <a
-              href={item.href}
-              aria-current={active ? "page" : undefined}
-              class:list={[
-                "rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                active
-                  ? "text-accent"
-                  : "text-slate-700 hover:text-accent",
-              ]}
-            >
-              {item.label}
-            </a>
-          );
-        })
-      }
-    </nav>
+    <ul class="hidden items-center gap-7 lg:flex">
+      {NAV.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class="font-display text-sm font-medium uppercase tracking-widest text-white/80 transition-colors hover:text-red"
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
 
     <div class="flex items-center gap-2">
-      <a
-        href={SITE.phoneHref}
-        class="hidden rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent-600 sm:inline-flex"
-      >
-        Call {SITE.phoneDisplay}
+      <a href={SITE.smsHref} class="btn btn-primary hidden text-sm sm:inline-flex">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v11H8l-4 4V5Z"/></svg>
+        Text to book
       </a>
 
       <!-- Mobile menu toggle -->
       <button
-        id="menu-toggle"
         type="button"
-        class="inline-flex items-center justify-center rounded-md p-2 text-slate-700 md:hidden"
-        aria-controls="mobile-menu"
+        class="inline-flex h-10 w-10 items-center justify-center rounded border border-white/15 text-white lg:hidden"
+        aria-label="Open menu"
         aria-expanded="false"
-        aria-label="Toggle navigation menu"
+        aria-controls="mobile-menu"
+        data-menu-btn
       >
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
-        </svg>
+        <svg class="h-6 w-6" data-icon-open viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="hidden h-6 w-6" data-icon-close viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
     </div>
-  </div>
+  </nav>
 
-  <!-- Mobile menu -->
-  <nav
+  <!-- Mobile menu panel -->
+  <div
     id="mobile-menu"
-    class="hidden border-t border-slate-200 bg-white md:hidden"
-    aria-label="Mobile"
+    class="hidden border-t border-line bg-ink-950/98 backdrop-blur lg:hidden"
+    data-mobile-menu
   >
-    <ul class="space-y-1 px-4 py-3">
-      {
-        NAV.map((item) => {
-          const active = current === norm(item.href);
-          return (
-            <li>
-              <a
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                class:list={[
-                  "block rounded-md px-3 py-2 text-base font-medium",
-                  active ? "bg-slate-50 text-accent" : "text-slate-700 hover:bg-slate-50",
-                ]}
-              >
-                {item.label}
-              </a>
-            </li>
-          );
-        })
-      }
-      <li class="pt-2">
-        <a
-          href={SITE.phoneHref}
-          class="block rounded-full bg-accent px-4 py-2 text-center text-base font-semibold text-white"
-        >
-          Call {SITE.phoneDisplay}
-        </a>
+    <ul class="mx-auto flex max-w-7xl flex-col px-4 py-2 sm:px-6">
+      {NAV.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class="block border-b border-line py-3 font-display text-base font-medium uppercase tracking-widest text-white/85 hover:text-red"
+            data-nav-link
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+      <li class="py-3">
+        <a href={SITE.smsHref} class="btn btn-primary w-full" data-nav-link>Text {SITE.phoneDisplay}</a>
       </li>
     </ul>
-  </nav>
+  </div>
 </header>
 
 <script>
-  const toggle = document.getElementById("menu-toggle");
-  const menu = document.getElementById("mobile-menu");
-  toggle?.addEventListener("click", () => {
-    const open = menu?.classList.toggle("hidden") === false;
-    toggle.setAttribute("aria-expanded", String(open));
-  });
+  // Sticky header: solid background after scrolling a little.
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  const onScroll = () => {
+    if (!header) return;
+    if (window.scrollY > 24) {
+      header.classList.add("bg-ink-950/95", "backdrop-blur", "border-line");
+    } else {
+      header.classList.remove("bg-ink-950/95", "backdrop-blur", "border-line");
+    }
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  // Mobile menu toggle.
+  const btn = document.querySelector<HTMLButtonElement>("[data-menu-btn]");
+  const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+  const iconOpen = document.querySelector<SVGElement>("[data-icon-open]");
+  const iconClose = document.querySelector<SVGElement>("[data-icon-close]");
+  const setMenu = (open: boolean) => {
+    if (!menu || !btn) return;
+    menu.classList.toggle("hidden", !open);
+    btn.setAttribute("aria-expanded", String(open));
+    btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    iconOpen?.classList.toggle("hidden", open);
+    iconClose?.classList.toggle("hidden", !open);
+  };
+  btn?.addEventListener("click", () => setMenu(menu?.classList.contains("hidden") ?? true));
+  document.querySelectorAll("[data-nav-link]").forEach((l) =>
+    l.addEventListener("click", () => setMenu(false))
+  );
 </script>

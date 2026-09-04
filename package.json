@@ -1,9 +1,9 @@
 {
-  "name": "earlsdetailing",
+  "name": "evansautodetail",
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "Static marketing site for Earl's Proper Detailing (Langhorne, PA), built with Astro + Tailwind CSS.",
+  "description": "Single-page static marketing site for Evans' Detailing — mobile auto detailing in Morrisville, PA (Lower Bucks County), built with Astro + Tailwind CSS.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

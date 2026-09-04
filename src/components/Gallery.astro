@@ -1,0 +1,162 @@
+---
+/**
+ * Gallery.astro — polished responsive grid of real work photos with a
+ * lightweight, dependency-free lightbox (click to enlarge, arrow/esc keys).
+ */
+import { Image, getImage } from "astro:assets";
+import { GALLERY, SITE } from "../consts";
+
+// Resolve the imported ImageMetadata for each gallery filename.
+const modules = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/gallery/*.{jpg,jpeg,png}",
+  { eager: true }
+);
+
+type Item = {
+  meta: ImageMetadata;
+  alt: string;
+  caption: string;
+  fullSrc: string;
+};
+
+const items: Item[] = [];
+for (const g of GALLERY) {
+  const mod = modules[`../assets/gallery/${g.file}`];
+  if (!mod) continue;
+  const meta = mod.default;
+  const full = await getImage({ src: meta, width: 1200, format: "webp" });
+  items.push({ meta, alt: g.alt, caption: g.caption, fullSrc: full.src });
+}
+---
+
+<section id="gallery" class="bg-ink py-20 sm:py-28">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="max-w-2xl">
+      <p class="eyebrow">Our work</p>
+      <h2 class="mt-4 text-3xl font-bold uppercase text-white sm:text-5xl">
+        Real cars. <span class="text-red">Real results.</span>
+      </h2>
+      <p class="mt-4 text-lg text-white/70">
+        Every one of these was detailed by Evans' Detailing right here in {SITE.region}.
+        Tap any photo to take a closer look.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      {items.map((it, i) => (
+        <button
+          type="button"
+          class="group relative block aspect-[4/3] overflow-hidden rounded-md border border-line focus-visible:outline-red"
+          data-lightbox
+          data-index={i}
+          data-full={it.fullSrc}
+          data-caption={it.caption}
+          aria-label={`View larger: ${it.caption}`}
+        >
+          <Image
+            src={it.meta}
+            alt={it.alt}
+            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            widths={[320, 480, 640]}
+            sizes="(min-width: 1024px) 24vw, (min-width: 640px) 32vw, 48vw"
+            loading="lazy"
+          />
+          <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/85 via-transparent to-transparent opacity-70 transition-opacity group-hover:opacity-90"></span>
+          <span class="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 p-3 text-left">
+            <span class="font-display text-sm font-medium uppercase tracking-wide text-white">{it.caption}</span>
+            <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-red text-white opacity-0 transition-opacity group-hover:opacity-100">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6M14 10 21 3M9 21H3v-6M10 14l-7 7"/></svg>
+            </span>
+          </span>
+        </button>
+      ))}
+
+      <!-- Facebook CTA tile -->
+      <a
+        href={SITE.social.facebook}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="col-span-2 flex items-center justify-center rounded-md border border-red bg-red/10 p-6 text-center transition-colors hover:bg-red/20"
+      >
+        <span class="font-display text-lg font-bold uppercase leading-tight text-white">
+          More on<br /><span class="text-red">Facebook</span> →
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-[70] hidden items-center justify-center bg-ink-950/95 p-4 backdrop-blur"
+    data-lb
+    aria-hidden="true"
+  >
+    <button type="button" class="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white hover:border-red hover:text-red" data-lb-close aria-label="Close">
+      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <button type="button" class="absolute left-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 text-white hover:border-red hover:text-red sm:left-6" data-lb-prev aria-label="Previous">
+      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <button type="button" class="absolute right-3 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 text-white hover:border-red hover:text-red sm:right-6" data-lb-next aria-label="Next">
+      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <figure class="flex max-h-full max-w-4xl flex-col items-center">
+      <img data-lb-img src="" alt="" class="max-h-[80vh] w-auto rounded-md border border-line object-contain" />
+      <figcaption data-lb-caption class="mt-3 font-display text-sm uppercase tracking-wide text-white/80"></figcaption>
+    </figure>
+  </div>
+</section>
+
+<script>
+  const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-lightbox]"));
+  const lb = document.querySelector<HTMLElement>("[data-lb]");
+  const lbImg = document.querySelector<HTMLImageElement>("[data-lb-img]");
+  const lbCap = document.querySelector<HTMLElement>("[data-lb-caption]");
+  const slides = triggers.map((t) => ({
+    full: t.dataset.full || "",
+    caption: t.dataset.caption || "",
+    alt: t.querySelector("img")?.alt || "",
+  }));
+  let current = 0;
+
+  const render = () => {
+    if (!lbImg || !lbCap) return;
+    const s = slides[current];
+    lbImg.src = s.full;
+    lbImg.alt = s.alt;
+    lbCap.textContent = s.caption;
+  };
+  const open = (i: number) => {
+    current = i;
+    render();
+    lb?.classList.remove("hidden");
+    lb?.classList.add("flex");
+    lb?.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+  const close = () => {
+    lb?.classList.add("hidden");
+    lb?.classList.remove("flex");
+    lb?.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+  const step = (d: number) => {
+    current = (current + d + slides.length) % slides.length;
+    render();
+  };
+
+  triggers.forEach((t, i) => t.addEventListener("click", () => open(i)));
+  document.querySelector("[data-lb-close]")?.addEventListener("click", close);
+  document.querySelector("[data-lb-prev]")?.addEventListener("click", () => step(-1));
+  document.querySelector("[data-lb-next]")?.addEventListener("click", () => step(1));
+  lb?.addEventListener("click", (e) => {
+    if (e.target === lb) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (lb?.classList.contains("hidden")) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowRight") step(1);
+    if (e.key === "ArrowLeft") step(-1);
+  });
+</script>

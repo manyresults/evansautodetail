@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // The public production URL. Used for canonical URLs, Open Graph tags,
 // and sitemap.xml generation. Update here if the domain ever changes.
-const SITE_URL = 'https://earlsdetailing.com';
+const SITE_URL = 'https://evansautodetail.com';
 
 // https://astro.build/config
 export default defineConfig({

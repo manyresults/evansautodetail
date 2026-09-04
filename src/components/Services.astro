@@ -1,0 +1,57 @@
+---
+/**
+ * Services.astro — the services grid plus the "vehicle types we detail" strip.
+ */
+import { SERVICES, VEHICLE_TYPES, SITE } from "../consts";
+import ServiceIcon from "./ServiceIcon.astro";
+---
+
+<section id="services" class="bg-ink py-20 sm:py-28">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="max-w-2xl">
+      <p class="eyebrow">What we do</p>
+      <h2 class="mt-4 text-3xl font-bold uppercase text-white sm:text-5xl">
+        Detailing done <span class="text-red">right</span>
+      </h2>
+      <p class="mt-4 text-lg text-white/70">
+        Custom pricing on every job, with corporate and fleet rates available.
+        Tell us the vehicle and the goal — we'll take care of the rest.
+      </p>
+    </div>
+
+    <!-- Service cards -->
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {SERVICES.map((s) => (
+        <article class="card-lift group flex h-full flex-col rounded-md border border-line bg-ink-800 p-7">
+          <div class="flex h-12 w-12 items-center justify-center rounded bg-red/10 text-red transition-colors group-hover:bg-red group-hover:text-white">
+            <ServiceIcon name={s.icon} class="h-6 w-6" />
+          </div>
+          <h3 class="mt-5 text-xl font-semibold uppercase tracking-wide text-white">{s.title}</h3>
+          <p class="mt-3 text-[15px] leading-relaxed text-white/70">{s.summary}</p>
+        </article>
+      ))}
+    </div>
+
+    <!-- Vehicle types strip -->
+    <div class="mt-14 rounded-md border border-line bg-ink-900 p-7 sm:p-9">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div class="lg:max-w-xs">
+          <h3 class="text-2xl font-bold uppercase text-white">We detail <span class="text-red">all types</span> of vehicles</h3>
+          <p class="mt-2 text-white/60">If it drives, floats, or rides — we'll make it shine.</p>
+        </div>
+        <ul class="grid flex-1 grid-cols-2 gap-4 sm:grid-cols-4">
+          {VEHICLE_TYPES.map((v) => (
+            <li class="flex flex-col items-center gap-3 rounded border border-line bg-ink-800 px-3 py-6 text-center">
+              <ServiceIcon name={v.icon} class="h-9 w-9 text-red" />
+              <span class="text-sm font-medium text-white/85">{v.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 text-center">
+      <a href={SITE.smsHref} class="btn btn-primary text-base">Get a free quote — text {SITE.phoneDisplay}</a>
+    </div>
+  </div>
+</section>

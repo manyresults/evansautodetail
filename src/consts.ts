@@ -3,222 +3,204 @@
  *  SITE CONTENT & BUSINESS DATA — single source of truth
  * ─────────────────────────────────────────────────────────────────────────
  *  Everything a non-developer is likely to change lives here: business name,
- *  contact details, services, testimonials, nav, and SEO defaults. Edit this
- *  one file and the whole site + JSON-LD schema + sitemap update.
+ *  contact details, services, the vehicle types, reviews, nav, and SEO
+ *  defaults. Edit this one file and the whole single-page site + JSON-LD
+ *  schema + sitemap update.
  *
- *  ⚠️  CONTENT STATUS: This is a first-draft reconstruction assembled from
- *  public listings (the business website was not directly reachable from the
- *  build environment). Items marked `VERIFY` should be confirmed against the
- *  live site / owner before go-live. A follow-up session with network access
- *  to earlsdetailing.com can replace this with the exact copy + real photos.
+ *  Content was reconstructed from the live WordPress site (evansautodetail.com)
+ *  and cleaned up (typos fixed, copy expanded). Real work photos were pulled
+ *  from the site's media library and optimized. See `REVIEWS` below for the one
+ *  item still needing owner input.
  */
 
 export const SITE = {
-  name: "Earl's Proper Detailing",
-  shortName: "Earl's Detailing",
-  legalName: "Earl's Proper Detailing",
-  url: "https://earlsdetailing.com",
-  tagline: "Bucks County's trusted auto detailing shop for over 20 years.",
+  name: "Evans' Detailing",
+  legalName: "Evans' Auto Detail",
+  shortName: "Evans' Detailing",
+  url: "https://evansautodetail.com",
+
+  // Short, punchy positioning line.
+  tagline: "Full-Service Mobile Auto Detailing",
   // One-line description used as the default meta description / OG description.
   description:
-    "Earl's Proper Detailing in Langhorne, PA offers expert auto detailing, ceramic coating, paint correction, and paint protection film. 20+ years of experience and four-time Best of Bucks winner.",
+    "Evans' Detailing is a mobile car wash & auto detailing service based in Morrisville, PA, serving Lower Bucks County. Ceramic coatings, full interior & exterior detailing, wax and polish — we come to you. Text (267) 333-1071 to book.",
 
-  // Contact
-  phoneDisplay: "(215) 791-3015", // confirmed by owner
-  phoneHref: "tel:+12157913015",
-  email: "earlsdetailing@comcast.net",
+  owner: "Brian Evans",
 
-  // Address
-  address: {
-    street: "95 Bristol Oxford Valley Rd",
-    city: "Langhorne",
-    state: "PA",
-    zip: "19047",
-    country: "US",
-  },
-  // Approximate coordinates for JSON-LD (VERIFY / refine for exact pin).
-  geo: { lat: 40.1712, lng: -74.8846 },
+  // Contact — this business runs on text-to-book.
+  phoneDisplay: "(267) 333-1071",
+  smsHref: "sms:+12673331071",
+  telHref: "tel:+12673331071",
 
-  // Google Maps link (uses the address string — safe default).
-  mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=Earl%27s+Proper+Detailing+95+Bristol+Oxford+Valley+Rd+Langhorne+PA+19047",
+  // Service-area business (mobile) — no public street address is shown.
+  city: "Morrisville",
+  state: "PA",
+  region: "Lower Bucks County",
+  // Approximate service-area center (Morrisville, PA) for JSON-LD geo.
+  geo: { lat: 40.2087, lng: -74.7816 },
 
-  // Hours of operation.
-  // ⚠️ VERIFY — these are placeholder typical hours; confirm before go-live.
-  hoursConfirmed: false,
-  hours: [
-    { day: "Monday", open: "8:00 AM", close: "5:00 PM" },
-    { day: "Tuesday", open: "8:00 AM", close: "5:00 PM" },
-    { day: "Wednesday", open: "8:00 AM", close: "5:00 PM" },
-    { day: "Thursday", open: "8:00 AM", close: "5:00 PM" },
-    { day: "Friday", open: "8:00 AM", close: "5:00 PM" },
-    { day: "Saturday", open: "8:00 AM", close: "2:00 PM" },
-    { day: "Sunday", open: null, close: null }, // closed
-  ] as Array<{ day: string; open: string | null; close: string | null }>,
+  // Trust signals.
+  since: 1996,
+  yearsExperience: "25+",
+  guarantee:
+    "You don't pay unless you're completely satisfied — that's our 100% satisfaction guarantee.",
 
-  // Areas served (used in copy + JSON-LD areaServed).
-  serviceAreas: [
-    "Langhorne",
-    "Levittown",
-    "Fairless Hills",
-    "Newtown",
-    "Yardley",
-    "Bucks County, PA",
-  ],
+  // Hours.
+  hours: "By Appointment",
+  hoursNote: "Mobile service — we come to you, wherever your busy life takes you.",
 
-  // Trust signals
-  yearsExperience: "20+",
-  awards: "Four-time Best of Bucks winner",
-
-  // Social profiles (add/adjust URLs as confirmed).
+  // Social profiles.
   social: {
-    facebook: "https://www.facebook.com/earlsdetail/",
-    // instagram: "",
+    facebook: "https://www.facebook.com/Evans-Detailing-102546878623982",
   },
 
-  // Default social share image (lives in /public). Swap for a branded 1200x630.
+  // Default social share image (lives in /public).
   ogImage: "/og-image.png",
 } as const;
 
-/** Primary navigation (order matters). */
+/**
+ * Towns/areas served (used in the Contact section copy + JSON-LD areaServed).
+ * Lower Bucks County, PA and immediately surrounding communities.
+ */
+export const SERVICE_AREAS = [
+  "Morrisville",
+  "Yardley",
+  "Newtown",
+  "Levittown",
+  "Fairless Hills",
+  "Langhorne",
+  "Fallsington",
+  "Tullytown",
+  "Bristol",
+  "Falls Township",
+  "Lower Bucks County",
+] as const;
+
+/**
+ * Primary navigation — single-page anchors (order matters). The header logo
+ * links back to the top (#top).
+ */
 export const NAV = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/services/" },
-  { label: "Specials", href: "/specials/" },
-  { label: "About", href: "/about/" },
-  { label: "Contact", href: "/contact/" },
+  { label: "Services", href: "#services" },
+  { label: "About", href: "#about" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Reviews", href: "#reviews" },
+  { label: "Contact", href: "#contact" },
 ] as const;
 
 /**
  * Services. `icon` maps to an inline SVG in `src/components/ServiceIcon.astro`.
- * `featured: true` surfaces the service on the home page grid.
  */
 export interface Service {
   title: string;
-  slug: string;
   icon: string;
-  summary: string; // short — used on cards
-  description: string; // longer — used on the Services page
-  price?: string; // optional price note
-  featured?: boolean;
+  summary: string;
 }
 
 export const SERVICES: Service[] = [
   {
-    title: "Full Auto Detailing",
-    slug: "auto-detailing",
-    icon: "sparkle",
-    summary: "Interior & exterior detailing that makes your vehicle look like new.",
-    description:
-      "A complete interior and exterior detail — hand wash, clay, wax, tire renovator and shine, vinyl dressings, streak-free window finishes, and a deep interior clean of carpets, upholstery, and every surface. We treat every vehicle as if it were our own.",
-    featured: true,
+    title: "Exterior Wash",
+    icon: "wash",
+    summary:
+      "A meticulous hand wash that lifts road grime, salt, and brake dust — then a streak-free finish that makes the paint pop.",
+  },
+  {
+    title: "Wax & Polish",
+    icon: "polish",
+    summary:
+      "Machine polish and premium wax to cut haze and light swirls, seal the paint, and leave a deep, wet-looking shine.",
   },
   {
     title: "Ceramic Coating",
-    slug: "ceramic-coating",
     icon: "shield",
-    summary: "A durable barrier against the elements that keeps its shine for years.",
-    description:
-      "Professional-grade ceramic coating creates a long-lasting protective barrier against UV rays, road salt, bird droppings, and harsh weather. It locks in a deep, glossy finish and makes future washes far easier — protection measured in years, not months.",
-    price: "Packages from $800",
-    featured: true,
+    summary:
+      "A long-lasting protective layer that locks in gloss and shields your paint from UV, salt, and the elements for years.",
   },
   {
-    title: "Paint Correction & Polishing",
-    slug: "paint-correction",
-    icon: "polish",
-    summary: "Remove swirls, scratches, and oxidation to restore a mirror finish.",
-    description:
-      "Multi-stage machine polishing that removes swirl marks, light scratches, water spots, and oxidation, bringing back the deep, reflective gloss your paint had when it left the lot.",
-    featured: true,
+    title: "Interior Deep Cleaning",
+    icon: "interior",
+    summary:
+      "Carpets, upholstery, mats, vents, and every surface cleaned and dressed — we sweat the small details most people miss.",
   },
   {
-    title: "Paint Protection Film",
-    slug: "paint-protection-film",
-    icon: "film",
-    summary: "Clear film that shields high-impact panels from chips and abrasion.",
-    description:
-      "Paint protection film (PPF) adds a virtually invisible, self-healing layer over your vehicle's most vulnerable panels — bumpers, hood, and fenders — guarding against rock chips, road debris, and scratches.",
-    featured: true,
+    title: "Undercarriage Cleaning",
+    icon: "undercarriage",
+    summary:
+      "Flush out the salt, mud, and corrosive buildup underneath your vehicle — the damage you can't see but feel down the road.",
   },
   {
-    title: "Paintless Dent Repair",
-    slug: "paintless-dent-repair",
-    icon: "dent",
-    summary: "Fix dings and dents without repainting — fast and affordable.",
-    description:
-      "Paintless dent repair gently massages dents and door dings back to shape from behind the panel, preserving your factory paint. It's faster and more cost-effective than traditional bodywork.",
-    featured: true,
-  },
-  {
-    title: "Windshield Repair & Replacement",
-    slug: "windshield",
-    icon: "windshield",
-    summary: "Chip repair and full windshield replacement to keep you safe.",
-    description:
-      "From small chip and crack repairs to complete windshield replacement, we keep your glass clear and your vehicle safe on the road.",
-    featured: true,
-  },
-  {
-    title: "Truck Bed Liner",
-    slug: "truck-bed-liner",
-    icon: "truck",
-    summary: "Tough, protective spray-in liners for your truck bed.",
-    description:
-      "Durable spray-in bed liners protect your truck bed from scratches, rust, and corrosion, standing up to heavy loads and daily use.",
-  },
-  {
-    title: "Mobile Detailing",
-    slug: "mobile-detailing",
-    icon: "van",
-    summary: "Professional detailing that comes to you — home or office.",
-    description:
-      "Can't make it to the shop? Our mobile detailing service brings professional-grade care to your driveway or workplace. (Call to confirm availability in your area.)",
+    title: "Custom Detail",
+    icon: "sparkle",
+    summary:
+      "Not sure what you need? Tell us the vehicle and the goal and we'll build a custom package around it. Corporate rates available.",
   },
 ];
 
+/** Vehicle types serviced. `icon` maps to `src/components/ServiceIcon.astro`. */
+export const VEHICLE_TYPES: { label: string; icon: string }[] = [
+  { label: "Cars, Trucks & SUVs", icon: "car" },
+  { label: "Boats", icon: "boat" },
+  { label: "Commercial Vehicles", icon: "truck" },
+  { label: "Motorcycles", icon: "motorcycle" },
+];
+
 /**
- * Testimonials pulled from public reviews (Yelp/Google). Attribution is kept
- * generic where a full name wasn't available — add real names as confirmed.
+ * About-section stat blocks.
  */
-export interface Testimonial {
+export const STATS: { value: string; label: string }[] = [
+  { value: "1996", label: "Detailing since" },
+  { value: "25+", label: "Years of experience" },
+  { value: "100%", label: "Satisfaction guarantee" },
+  { value: "Mobile", label: "We come to you" },
+];
+
+/**
+ * Gallery — real work photos (in src/assets/gallery). Order controls layout.
+ * `feature: true` gives the photo a larger tile in the grid.
+ */
+export interface GalleryItem {
+  file: string; // filename in src/assets/gallery/
+  alt: string;
+  caption: string;
+  feature?: boolean;
+}
+
+export const GALLERY: GalleryItem[] = [
+  { file: "evans-detail-black-kia.jpg", alt: "Freshly detailed black Kia Sportage with a deep mirror gloss", caption: "Black Kia Sportage — mirror finish", feature: true },
+  { file: "evans-detail-camaro.jpg", alt: "Orange Chevrolet Camaro SS with racing stripes after detailing", caption: "Camaro SS — exterior detail" },
+  { file: "evans-detail-nissan-murano.jpg", alt: "Red Nissan Murano SUV washed and waxed", caption: "Nissan Murano — wash & wax" },
+  { file: "evans-detail-mazda-cx9.jpg", alt: "Dark blue Mazda CX-9 detailed to a high shine", caption: "Mazda CX-9 — full exterior" },
+  { file: "evans-detail-ford-taurus.jpg", alt: "Red Ford Taurus SHO sedan detailed", caption: "Ford Taurus SHO — paint pop", feature: true },
+  { file: "evans-detail-silverado-truck.jpg", alt: "Blue Chevrolet Silverado pickup truck detailed", caption: "Chevy Silverado — truck detail" },
+  { file: "evans-detail-jeep-renegade.jpg", alt: "White Jeep Renegade cleaned and detailed", caption: "Jeep Renegade — exterior wash" },
+  { file: "evans-detail-motorcycle.jpg", alt: "Blue Harley-Davidson touring motorcycle detailed", caption: "Harley-Davidson — motorcycle detail" },
+  { file: "evans-detail-boat.jpg", alt: "White cabin cruiser boat cleaned at the marina", caption: "Cabin cruiser — boat detail" },
+  { file: "evans-detail-commercial-truck.jpg", alt: "White Peterbilt commercial roll-off truck washed", caption: "Peterbilt — commercial fleet" },
+];
+
+/**
+ * Reviews / testimonials.
+ *
+ *  ⚠️  ACTION NEEDED — REAL REVIEW TEXT.
+ *  The old site's "Reviews" section was only screenshot images with no text,
+ *  and Facebook/Google/Yelp couldn't be reached from the build environment to
+ *  pull genuine quotes. So this array is intentionally EMPTY: the Reviews
+ *  section renders a strong "satisfaction guarantee + leave us a review" panel
+ *  instead of any invented testimonials (we will not fabricate reviews).
+ *
+ *  To add real ones, paste genuine quotes below in this shape and they'll
+ *  render automatically as cards:
+ *
+ *    { quote: "Brian did an incredible job on my truck...", author: "First name", source: "Google" },
+ *
+ *  Pull them from the Facebook page reviews or Google Business profile.
+ */
+export interface Review {
   quote: string;
   author: string;
   source?: string;
 }
 
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    quote:
-      "Dario did a fantastic job — inside and out. The interior looks amazing and the exterior is so clean it looks like the day I rolled it off the lot. The engine looks sweet too. Easy going and kind. I'll definitely return and recommend to others.",
-    author: "Satisfied Customer",
-    source: "Yelp Review",
-  },
-  {
-    quote:
-      "A great auto detail and body shop for all of your vehicles. Had my Camry ceramic coated, scratches removed, and the body polished — the results speak for themselves.",
-    author: "Verified Customer",
-    source: "Yelp Review",
-  },
-  {
-    quote:
-      "Earl is honest and fair. He repaired scratches on my car at a very reasonable price and did excellent work. Highly recommend.",
-    author: "Local Customer",
-    source: "Google Review",
-  },
-];
-
-/** Current specials / promotions (edit freely). */
-export const SPECIALS = [
-  {
-    title: "10% Off Your Service",
-    detail: "Mention our website when you book and take 10% off your detailing service.",
-    highlight: "Mention this site",
-  },
-  {
-    title: "Ceramic Coating Packages",
-    detail:
-      "Long-lasting ceramic protection with packages starting at $800. Ask about the right package for your vehicle.",
-    highlight: "From $800",
-  },
+export const REVIEWS: Review[] = [
+  // Add real customer quotes here — see note above.
 ];

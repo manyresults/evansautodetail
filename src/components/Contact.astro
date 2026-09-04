@@ -1,0 +1,65 @@
+---
+/**
+ * Contact.astro — the primary conversion section. Text-to-book is the hero
+ * action; also shows hours, how-to-book, and the service area for local SEO.
+ */
+import { SITE, SERVICE_AREAS } from "../consts";
+---
+
+<section id="contact" class="relative overflow-hidden bg-ink-950 py-20 sm:py-28">
+  <!-- Red glow accents -->
+  <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-red/20 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-red/10 blur-3xl"></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="eyebrow justify-center">Book your detail</p>
+      <h2 class="mt-4 text-4xl font-bold uppercase leading-[0.98] text-white sm:text-6xl">
+        Ready to make it <span class="text-red">shine?</span>
+      </h2>
+      <p class="mt-5 text-lg text-white/75">
+        Booking is easy — just send a text. Tell {SITE.owner} your vehicle and
+        what you're after, and you'll get a free, no-pressure quote. We come to
+        you, anywhere in {SITE.region}.
+      </p>
+
+      <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <a href={SITE.smsHref} class="btn btn-primary px-8 py-4 text-lg">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5h16v11H8l-4 4V5Z"/></svg>
+          Text {SITE.phoneDisplay}
+        </a>
+        <a href={SITE.social.facebook} target="_blank" rel="noopener noreferrer" class="btn btn-ghost px-8 py-4 text-lg">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.3-1.5 1.6-1.5H17V3.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v2.2H7.7V13h2.8v8h3Z"/></svg>
+          Follow on Facebook
+        </a>
+      </div>
+    </div>
+
+    <!-- Info cards -->
+    <div class="mt-16 grid gap-5 md:grid-cols-3">
+      <div class="rounded-md border border-line bg-ink-800 p-7">
+        <h3 class="font-display text-lg font-bold uppercase text-red">How to book</h3>
+        <p class="mt-3 text-white/75">
+          Text <a href={SITE.smsHref} class="font-semibold text-white underline decoration-red underline-offset-4">{SITE.phoneDisplay}</a>
+          with your vehicle type and location. {SITE.owner} will get you a quote
+          and set a time that works.
+        </p>
+      </div>
+      <div class="rounded-md border border-line bg-ink-800 p-7">
+        <h3 class="font-display text-lg font-bold uppercase text-red">Hours</h3>
+        <p class="mt-3 text-white/75">
+          <span class="font-semibold text-white">{SITE.hours}.</span><br />
+          {SITE.hoursNote}
+        </p>
+      </div>
+      <div class="rounded-md border border-line bg-ink-800 p-7">
+        <h3 class="font-display text-lg font-bold uppercase text-red">Service area</h3>
+        <p class="mt-3 text-white/75">
+          Proudly serving <span class="text-white">{SITE.region}, PA</span> —
+          {SERVICE_AREAS.filter((a) => a !== "Lower Bucks County").join(", ")}, and
+          the surrounding towns.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
