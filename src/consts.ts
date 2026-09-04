@@ -202,5 +202,27 @@ export interface Review {
 }
 
 export const REVIEWS: Review[] = [
-  // Add real customer quotes here — see note above.
+  {
+    quote:
+      "He did such an amazing job detailing our Jeep, both inside and out! We have two dogs who shed, and the inside was a disaster — it now looks brand new. He truly transformed the vehicle. I highly recommend him to anyone looking for car detailing.",
+    author: "Cori Meysenburg Martin",
+    source: "Facebook",
+  },
+  {
+    quote:
+      "Brian did the detailing on my husband's car and it looked great. The car was so shiny and clean! He is very professional and friendly. Highly recommend Evans' Detailing.",
+    author: "Marcia Campanha Gallen",
+    source: "Facebook",
+  },
+  {
+    quote:
+      "He does awesome work, and I'm hard to please — trust me. If I'm impressed, I'm 100 percent sure you will be too!",
+    author: "Clark Kentt",
+    source: "Facebook",
+  },
+  {
+    quote: "Attention to detail and value.",
+    author: "James R. Hanover",
+    source: "Facebook",
+  },
 ];
