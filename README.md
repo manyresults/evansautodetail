@@ -7,6 +7,11 @@ deployed to SiteGround via GitHub Actions (SFTP).
 
 This project replaces the previous WordPress site.
 
+> 👉 **Just want to update content?** See **[EDITING.md](./EDITING.md)** — a
+> plain-English cheat-sheet for common edits (change phone, add a review, add
+> a service, swap a photo) using GitHub's browser-based pencil-icon editor. No
+> local install needed.
+
 ---
 
 ## Quick start
